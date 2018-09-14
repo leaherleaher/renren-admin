@@ -1,6 +1,6 @@
 **项目说明** 
 
-renren-admin的SpringBoot版，该版本使用JDK10、mysql5.7
+renren-admin的SpringBoot版，该版本使用JDK10、Mysql5.7
 
 <br> 
 
