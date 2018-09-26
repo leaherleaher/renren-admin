@@ -190,7 +190,6 @@
                 error:function(xhr,textStatus){
                     var _errorMsg = '<tr><td colspan="'+options.columns.length+'"><div style="display: block;text-align: center;">'+xhr.responseText+'</div></td></tr>'
                     tbody.html(_errorMsg);
-                    debugger;
                 },
             });
         }

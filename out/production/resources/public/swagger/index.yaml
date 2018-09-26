@@ -25,22 +25,30 @@ paths:
       summary: 用户登录
       produces:
         - application/json
+      #parameters:
       parameters:
-        - name: username
-          description: 用户名
-          in: query
+        - name: body
+          description: 管理员对象
+          in: body
           type: string
+          schema:
+            $ref: '#/definitions/LoginEntity'
           required: true
-        - name: password
-          description: 密码
-          in: query
-          type: string
-          required: true
-        - name: captcha
-          description: 验证码
-          in: query
-          type: string
-          required: true
+#        - name: username
+#          description: 用户名
+#          in: query
+#          type: string
+#          required: true
+#        - name: password
+#          description: 密码
+#          in: query
+#          type: string
+#          required: true
+#        - name: captcha
+#          description: 验证码
+#          in: query
+#          type: string
+#          required: true
       responses:
         '200':
           schema:
@@ -185,7 +193,7 @@ paths:
           in: body
           type: string
           schema:
-            $ref: '#/definitions/SysUserEntityEdit'
+            $ref: '#/definitions/SysUserEntitySave'
           required: true
       responses:
         '200':
@@ -310,7 +318,7 @@ paths:
           in: body
           type: string
           schema:
-            $ref: '#/definitions/SysRoleEntityEdit'
+            $ref: '#/definitions/SysRoleEntitySave'
           required: true
       responses:
         '200':
@@ -425,7 +433,7 @@ paths:
           in: body
           type: string
           schema:
-            $ref: '#/definitions/SysMenuEntityEdit'
+            $ref: '#/definitions/SysMenuEntitySave'
           required: true
       responses:
         '200':
@@ -472,445 +480,445 @@ paths:
           schema:
             $ref: '#/definitions/R'
 
-  /sys/log/list:
-    get:
-      tags:
-        - 系统日志
-      summary: 日志列表
-      produces:
-        - application/json
-      parameters:
-        - name: page
-          description: 页码
-          in: query
-          type: integer
-          required: true
-        - name: limit
-          description: 每页条数
-          in: query
-          type: integer
-          required: true
-        - name: sidx
-          description: 排序字段
-          in: query
-          type: string
-        - name: order
-          description: 排序方式，如：asc、desc
-          in: query
-          type: string
-        - name: key
-          description: 用户名或用户操作
-          in: query
-          type: string
-      responses:
-        '200':
-          description: 返回日志列表
-          schema:
-            $ref: '#/definitions/SysLogEntity'
-
-  /sys/config/list:
-    get:
-      tags:
-        - 参数管理
-      summary: 参数列表
-      produces:
-        - application/json
-      parameters:
-        - name: page
-          description: 页码
-          in: query
-          type: integer
-          required: true
-        - name: limit
-          description: 每页条数
-          in: query
-          type: integer
-          required: true
-        - name: sidx
-          description: 排序字段
-          in: query
-          type: string
-        - name: order
-          description: 排序方式，如：asc、desc
-          in: query
-          type: string
-        - name: key
-          description: 参数名
-          in: query
-          type: string
-      responses:
-        '200':
-          description: 返回参数列表
-          schema:
-            $ref: '#/definitions/SysConfigEntity'
-  /sys/config/info/{id}:
-    get:
-      tags:
-        - 参数管理
-      summary: 获取参数信息
-      produces:
-        - application/json
-      parameters:
-        - name: id
-          description: 参数ID
-          in: path
-          type: integer
-          required: true
-      responses:
-        '200':
-          description: 返回参数信息
-          schema:
-            $ref: '#/definitions/SysConfigEntity'
-  /sys/config/save:
-    post:
-      tags:
-        - 参数管理
-      summary: 添加参数
-      produces:
-        - application/json
-      parameters:
-        - name: body
-          description: 参数对象
-          in: body
-          type: string
-          schema:
-            $ref: '#/definitions/SysConfigEntity'
-          required: true
-      responses:
-        '200':
-          schema:
-            $ref: '#/definitions/R'
-  /sys/config/update:
-    post:
-      tags:
-        - 参数管理
-      summary: 修改参数
-      produces:
-        - application/json
-      parameters:
-        - name: body
-          description: 参数对象
-          in: body
-          type: string
-          schema:
-            $ref: '#/definitions/SysConfigEntity'
-          required: true
-      responses:
-        '200':
-          schema:
-            $ref: '#/definitions/R'
-  /sys/config/delete:
-    post:
-      tags:
-        - 参数管理
-      summary: 删除参数
-      produces:
-        - application/json
-      parameters:
-        - name: body
-          description: 参数ID列表
-          in: body
-          type: array
-          items:
-            type: integer
-            format: int64
-            default: 0
-          required: true
-      responses:
-        '200':
-          schema:
-            $ref: '#/definitions/R'
-
-  /sys/oss/list:
-    get:
-      tags:
-        - 文件服务
-      summary: 文件列表
-      produces:
-        - application/json
-      parameters:
-        - name: page
-          description: 页码
-          in: query
-          type: integer
-          required: true
-        - name: limit
-          description: 每页条数
-          in: query
-          type: integer
-          required: true
-        - name: sidx
-          description: 排序字段
-          in: query
-          type: string
-        - name: order
-          description: 排序方式，如：asc、desc
-          in: query
-          type: string
-      responses:
-        '200':
-          description: 返回文件列表
-          schema:
-            $ref: '#/definitions/SysOssEntity'
-  /sys/oss/config:
-    get:
-      tags:
-        - 文件服务
-      summary: 云存储配置信息
-      produces:
-        - application/json
-      responses:
-        '200':
-          description: 返回云存储配置信息
-          schema:
-            $ref: '#/definitions/SysCloudStorageEntity'
-  /sys/oss/saveConfig:
-    post:
-      tags:
-        - 文件服务
-      summary: 保存云存储配置信息
-      produces:
-        - application/json
-      parameters:
-        - name: body
-          description: 参数对象
-          in: body
-          type: string
-          schema:
-            $ref: '#/definitions/SysCloudStorageEntity'
-          required: true
-      responses:
-        '200':
-          schema:
-            $ref: '#/definitions/R'
-  /sys/oss/upload:
-    post:
-      tags:
-        - 文件服务
-      summary: 上传文件
-      consumes:
-        - multipart/form-data
-      produces:
-        - application/json
-      parameters:
-        - name: file
-          description: 文件
-          in: formData
-          type: file
-          required: true
-      responses:
-        '200':
-          description: 返回文件列表
-          schema:
-            type: object
-            properties:
-              code:
-                description: 状态码 0：成功  非0：失败
-                type: integer
-                format: int32
-              url:
-                description: 文件URL地址
-                type: string
-              msg:
-                description: 失败原因
-                type: string
-  /sys/oss/delete:
-    post:
-      tags:
-        - 文件服务
-      summary: 删除文件
-      produces:
-        - application/json
-      parameters:
-        - name: body
-          description: 文件ID列表
-          in: body
-          type: array
-          items:
-            type: integer
-            format: int64
-            default: 0
-          required: true
-      responses:
-        '200':
-          schema:
-            $ref: '#/definitions/R'
-
-  /sys/schedule/list:
-    get:
-      tags:
-        - 定时任务
-      summary: 定时任务列表
-      produces:
-        - application/json
-      parameters:
-        - name: page
-          description: 页码
-          in: query
-          type: integer
-          required: true
-        - name: limit
-          description: 每页条数
-          in: query
-          type: integer
-          required: true
-        - name: sidx
-          description: 排序字段
-          in: query
-          type: string
-        - name: order
-          description: 排序方式，如：asc、desc
-          in: query
-          type: string
-        - name: beanName
-          description: spring bean名称
-          in: query
-          type: string
-      responses:
-        '200':
-          description: 返回定时任务列表
-          schema:
-            $ref: '#/definitions/ScheduleJobEntity'
-  /sys/schedule/info/{id}:
-    get:
-      tags:
-        - 定时任务
-      summary: 获取定时任务信息
-      produces:
-        - application/json
-      parameters:
-        - name: jobId
-          description: 定时任务ID
-          in: path
-          type: integer
-          required: true
-      responses:
-        '200':
-          description: 返回定时任务信息
-          schema:
-            $ref: '#/definitions/ScheduleJobEntity'
-  /sys/schedule/save:
-    post:
-      tags:
-        - 定时任务
-      summary: 添加定时任务
-      produces:
-        - application/json
-      parameters:
-        - name: body
-          description: 定时任务对象
-          in: body
-          type: string
-          schema:
-            $ref: '#/definitions/ScheduleJobEntity'
-          required: true
-      responses:
-        '200':
-          schema:
-            $ref: '#/definitions/R'
-  /sys/schedule/update:
-    post:
-      tags:
-        - 定时任务
-      summary: 修改定时任务
-      produces:
-        - application/json
-      parameters:
-        - name: body
-          description: 定时任务对象
-          in: body
-          type: string
-          schema:
-            $ref: '#/definitions/ScheduleJobEntity'
-          required: true
-      responses:
-        '200':
-          schema:
-            $ref: '#/definitions/R'
-  /sys/schedule/delete:
-    post:
-      tags:
-        - 定时任务
-      summary: 删除定时任务
-      produces:
-        - application/json
-      parameters:
-        - name: body
-          description: 定时任务ID列表
-          in: body
-          type: array
-          items:
-            type: integer
-            format: int64
-            default: 0
-          required: true
-      responses:
-        '200':
-          schema:
-            $ref: '#/definitions/R'
-  /sys/schedule/run:
-    post:
-      tags:
-        - 定时任务
-      summary: 立即执行任务
-      produces:
-        - application/json
-      parameters:
-        - name: body
-          description: 定时任务ID列表
-          in: body
-          type: array
-          items:
-            type: integer
-            format: int64
-            default: 0
-          required: true
-      responses:
-        '200':
-          schema:
-            $ref: '#/definitions/R'
-  /sys/schedule/pause:
-    post:
-      tags:
-        - 定时任务
-      summary: 暂停定时任务
-      produces:
-        - application/json
-      parameters:
-        - name: body
-          description: 定时任务ID列表
-          in: body
-          type: array
-          items:
-            type: integer
-            format: int64
-            default: 0
-          required: true
-      responses:
-        '200':
-          schema:
-            $ref: '#/definitions/R'
-  /sys/schedule/resume:
-    post:
-      tags:
-        - 定时任务
-      summary: 恢复定时任务
-      produces:
-        - application/json
-      parameters:
-        - name: body
-          description: 定时任务ID列表
-          in: body
-          type: array
-          items:
-            type: integer
-            format: int64
-            default: 0
-          required: true
-      responses:
-        '200':
-          schema:
-            $ref: '#/definitions/R'
+#  /sys/log/list:
+#    get:
+#      tags:
+#        - 系统日志
+#      summary: 日志列表
+#      produces:
+#        - application/json
+#      parameters:
+#        - name: page
+#          description: 页码
+#          in: query
+#          type: integer
+#          required: true
+#        - name: limit
+#          description: 每页条数
+#          in: query
+#          type: integer
+#          required: true
+#        - name: sidx
+#          description: 排序字段
+#          in: query
+#          type: string
+#        - name: order
+#          description: 排序方式，如：asc、desc
+#          in: query
+#          type: string
+#        - name: key
+#          description: 用户名或用户操作
+#          in: query
+#          type: string
+#      responses:
+#        '200':
+#          description: 返回日志列表
+#          schema:
+#            $ref: '#/definitions/SysLogEntity'
+#
+#  /sys/config/list:
+#    get:
+#      tags:
+#        - 参数管理
+#      summary: 参数列表
+#      produces:
+#        - application/json
+#      parameters:
+#        - name: page
+#          description: 页码
+#          in: query
+#          type: integer
+#          required: true
+#        - name: limit
+#          description: 每页条数
+#          in: query
+#          type: integer
+#          required: true
+#        - name: sidx
+#          description: 排序字段
+#          in: query
+#          type: string
+#        - name: order
+#          description: 排序方式，如：asc、desc
+#          in: query
+#          type: string
+#        - name: key
+#          description: 参数名
+#          in: query
+#          type: string
+#      responses:
+#        '200':
+#          description: 返回参数列表
+#          schema:
+#            $ref: '#/definitions/SysConfigEntity'
+#  /sys/config/info/{id}:
+#    get:
+#      tags:
+#        - 参数管理
+#      summary: 获取参数信息
+#      produces:
+#        - application/json
+#      parameters:
+#        - name: id
+#          description: 参数ID
+#          in: path
+#          type: integer
+#          required: true
+#      responses:
+#        '200':
+#          description: 返回参数信息
+#          schema:
+#            $ref: '#/definitions/SysConfigEntity'
+#  /sys/config/save:
+#    post:
+#      tags:
+#        - 参数管理
+#      summary: 添加参数
+#      produces:
+#        - application/json
+#      parameters:
+#        - name: body
+#          description: 参数对象
+#          in: body
+#          type: string
+#          schema:
+#            $ref: '#/definitions/SysConfigEntity'
+#          required: true
+#      responses:
+#        '200':
+#          schema:
+#            $ref: '#/definitions/R'
+#  /sys/config/update:
+#    post:
+#      tags:
+#        - 参数管理
+#      summary: 修改参数
+#      produces:
+#        - application/json
+#      parameters:
+#        - name: body
+#          description: 参数对象
+#          in: body
+#          type: string
+#          schema:
+#            $ref: '#/definitions/SysConfigEntity'
+#          required: true
+#      responses:
+#        '200':
+#          schema:
+#            $ref: '#/definitions/R'
+#  /sys/config/delete:
+#    post:
+#      tags:
+#        - 参数管理
+#      summary: 删除参数
+#      produces:
+#        - application/json
+#      parameters:
+#        - name: body
+#          description: 参数ID列表
+#          in: body
+#          type: array
+#          items:
+#            type: integer
+#            format: int64
+#            default: 0
+#          required: true
+#      responses:
+#        '200':
+#          schema:
+#            $ref: '#/definitions/R'
+#
+#  /sys/oss/list:
+#    get:
+#      tags:
+#        - 文件服务
+#      summary: 文件列表
+#      produces:
+#        - application/json
+#      parameters:
+#        - name: page
+#          description: 页码
+#          in: query
+#          type: integer
+#          required: true
+#        - name: limit
+#          description: 每页条数
+#          in: query
+#          type: integer
+#          required: true
+#        - name: sidx
+#          description: 排序字段
+#          in: query
+#          type: string
+#        - name: order
+#          description: 排序方式，如：asc、desc
+#          in: query
+#          type: string
+#      responses:
+#        '200':
+#          description: 返回文件列表
+#          schema:
+#            $ref: '#/definitions/SysOssEntity'
+#  /sys/oss/config:
+#    get:
+#      tags:
+#        - 文件服务
+#      summary: 云存储配置信息
+#      produces:
+#        - application/json
+#      responses:
+#        '200':
+#          description: 返回云存储配置信息
+#          schema:
+#            $ref: '#/definitions/SysCloudStorageEntity'
+#  /sys/oss/saveConfig:
+#    post:
+#      tags:
+#        - 文件服务
+#      summary: 保存云存储配置信息
+#      produces:
+#        - application/json
+#      parameters:
+#        - name: body
+#          description: 参数对象
+#          in: body
+#          type: string
+#          schema:
+#            $ref: '#/definitions/SysCloudStorageEntity'
+#          required: true
+#      responses:
+#        '200':
+#          schema:
+#            $ref: '#/definitions/R'
+#  /sys/oss/upload:
+#    post:
+#      tags:
+#        - 文件服务
+#      summary: 上传文件
+#      consumes:
+#        - multipart/form-data
+#      produces:
+#        - application/json
+#      parameters:
+#        - name: file
+#          description: 文件
+#          in: formData
+#          type: file
+#          required: true
+#      responses:
+#        '200':
+#          description: 返回文件列表
+#          schema:
+#            type: object
+#            properties:
+#              code:
+#                description: 状态码 0：成功  非0：失败
+#                type: integer
+#                format: int32
+#              url:
+#                description: 文件URL地址
+#                type: string
+#              msg:
+#                description: 失败原因
+#                type: string
+#  /sys/oss/delete:
+#    post:
+#      tags:
+#        - 文件服务
+#      summary: 删除文件
+#      produces:
+#        - application/json
+#      parameters:
+#        - name: body
+#          description: 文件ID列表
+#          in: body
+#          type: array
+#          items:
+#            type: integer
+#            format: int64
+#            default: 0
+#          required: true
+#      responses:
+#        '200':
+#          schema:
+#            $ref: '#/definitions/R'
+#
+#  /sys/schedule/list:
+#    get:
+#      tags:
+#        - 定时任务
+#      summary: 定时任务列表
+#      produces:
+#        - application/json
+#      parameters:
+#        - name: page
+#          description: 页码
+#          in: query
+#          type: integer
+#          required: true
+#        - name: limit
+#          description: 每页条数
+#          in: query
+#          type: integer
+#          required: true
+#        - name: sidx
+#          description: 排序字段
+#          in: query
+#          type: string
+#        - name: order
+#          description: 排序方式，如：asc、desc
+#          in: query
+#          type: string
+#        - name: beanName
+#          description: spring bean名称
+#          in: query
+#          type: string
+#      responses:
+#        '200':
+#          description: 返回定时任务列表
+#          schema:
+#            $ref: '#/definitions/ScheduleJobEntity'
+#  /sys/schedule/info/{id}:
+#    get:
+#      tags:
+#        - 定时任务
+#      summary: 获取定时任务信息
+#      produces:
+#        - application/json
+#      parameters:
+#        - name: jobId
+#          description: 定时任务ID
+#          in: path
+#          type: integer
+#          required: true
+#      responses:
+#        '200':
+#          description: 返回定时任务信息
+#          schema:
+#            $ref: '#/definitions/ScheduleJobEntity'
+#  /sys/schedule/save:
+#    post:
+#      tags:
+#        - 定时任务
+#      summary: 添加定时任务
+#      produces:
+#        - application/json
+#      parameters:
+#        - name: body
+#          description: 定时任务对象
+#          in: body
+#          type: string
+#          schema:
+#            $ref: '#/definitions/ScheduleJobEntity'
+#          required: true
+#      responses:
+#        '200':
+#          schema:
+#            $ref: '#/definitions/R'
+#  /sys/schedule/update:
+#    post:
+#      tags:
+#        - 定时任务
+#      summary: 修改定时任务
+#      produces:
+#        - application/json
+#      parameters:
+#        - name: body
+#          description: 定时任务对象
+#          in: body
+#          type: string
+#          schema:
+#            $ref: '#/definitions/ScheduleJobEntity'
+#          required: true
+#      responses:
+#        '200':
+#          schema:
+#            $ref: '#/definitions/R'
+#  /sys/schedule/delete:
+#    post:
+#      tags:
+#        - 定时任务
+#      summary: 删除定时任务
+#      produces:
+#        - application/json
+#      parameters:
+#        - name: body
+#          description: 定时任务ID列表
+#          in: body
+#          type: array
+#          items:
+#            type: integer
+#            format: int64
+#            default: 0
+#          required: true
+#      responses:
+#        '200':
+#          schema:
+#            $ref: '#/definitions/R'
+#  /sys/schedule/run:
+#    post:
+#      tags:
+#        - 定时任务
+#      summary: 立即执行任务
+#      produces:
+#        - application/json
+#      parameters:
+#        - name: body
+#          description: 定时任务ID列表
+#          in: body
+#          type: array
+#          items:
+#            type: integer
+#            format: int64
+#            default: 0
+#          required: true
+#      responses:
+#        '200':
+#          schema:
+#            $ref: '#/definitions/R'
+#  /sys/schedule/pause:
+#    post:
+#      tags:
+#        - 定时任务
+#      summary: 暂停定时任务
+#      produces:
+#        - application/json
+#      parameters:
+#        - name: body
+#          description: 定时任务ID列表
+#          in: body
+#          type: array
+#          items:
+#            type: integer
+#            format: int64
+#            default: 0
+#          required: true
+#      responses:
+#        '200':
+#          schema:
+#            $ref: '#/definitions/R'
+#  /sys/schedule/resume:
+#    post:
+#      tags:
+#        - 定时任务
+#      summary: 恢复定时任务
+#      produces:
+#        - application/json
+#      parameters:
+#        - name: body
+#          description: 定时任务ID列表
+#          in: body
+#          type: array
+#          items:
+#            type: integer
+#            format: int64
+#            default: 0
+#          required: true
+#      responses:
+#        '200':
+#          schema:
+#            $ref: '#/definitions/R'
 
 #定义数据模型
 definitions:
@@ -934,13 +942,13 @@ definitions:
       username:
         description: 用户名
         type: string
-      deptId:
-        description: 部门ID
-        type: integer
-        format: int64
-      deptName:
-        description: 部门名称
-        type: string
+#      deptId:
+#        description: 部门ID
+#        type: integer
+#        format: int64
+#      deptName:
+#        description: 部门名称
+#        type: string
       password:
         description: 密码
         type: string
@@ -968,20 +976,12 @@ definitions:
         description: 创建时间
         type: string
         format: date-time
-  SysUserEntityEdit:
+  SysUserEntitySave:
       type: object
       properties:
-        userId:
-          description: 用户ID
-          type: integer
-          format: int64
         username:
           description: 用户名
           type: string
-        deptId:
-          description: 部门ID
-          type: integer
-          format: int64
         password:
           description: 密码
           type: string
@@ -1001,45 +1001,78 @@ definitions:
           items:
             type: integer
             format: int32
-  SysDeptEntity:
-    type: object
-    properties:
-      deptId:
-        description: 部门ID
-        type: integer
-        format: int64
-      name:
-        description: 部门名称
-        type: string
-      parentId:
-        description: 上级部门ID，一级部门为0
-        type: integer
-        format: int64
-      parentName:
-        description: 上级部门名称
-        type: string
-      orderNum:
-        description: 排序
-        type: integer
-        format: int32
-      open:
-        description: 是否展开   true：展开   false：不展开
-        type: boolean
-        format: int32
-  SysDeptEntityEdit:
-    type: object
-    properties:
-      name:
-        description: 部门名称
-        type: string
-      parentId:
-        description: 上级部门ID，一级部门为0
-        type: integer
-        format: int64
-      orderNum:
-        description: 排序
-        type: integer
-        format: int32
+  SysUserEntityEdit:
+      type: object
+      properties:
+        userId:
+          description: 用户ID
+          type: integer
+          format: int64
+        username:
+          description: 用户名
+          type: string
+#        deptId:
+#          description: 部门ID
+#          type: integer
+#          format: int64
+        password:
+          description: 密码
+          type: string
+        email:
+          description: 邮箱
+          type: string
+        mobile:
+          description: 手机号
+          type: string
+        status:
+          description: 状态  0：禁用   1：正常
+          type: integer
+          format: int32
+        roleIdList:
+          description: 角色ID列表
+          type: array
+          items:
+            type: integer
+            format: int32
+#  SysDeptEntity:
+#    type: object
+#    properties:
+#      deptId:
+#        description: 部门ID
+#        type: integer
+#        format: int64
+#      name:
+#        description: 部门名称
+#        type: string
+#      parentId:
+#        description: 上级部门ID，一级部门为0
+#        type: integer
+#        format: int64
+#      parentName:
+#        description: 上级部门名称
+#        type: string
+#      orderNum:
+#        description: 排序
+#        type: integer
+#        format: int32
+#      open:
+#        description: 是否展开   true：展开   false：不展开
+#        type: boolean
+#        format: int32
+#  SysDeptEntityEdit:
+#    type: object
+#    properties:
+#      name:
+#        description: 部门名称
+#        type: string
+#      parentId:
+#        description: 上级部门ID，一级部门为0
+#        type: integer
+#        format: int64
+#      orderNum:
+#        description: 排序
+#        type: integer
+#        format: int32
   SysRoleEntity:
     type: object
     properties:
@@ -1050,13 +1083,13 @@ definitions:
       roleName:
         description: 角色名称
         type: string
-      deptId:
-        description: 部门ID
-        type: integer
-        format: int64
-      deptName:
-        description: 部门名称
-        type: string
+#      deptId:
+#        description: 部门ID
+#        type: integer
+#        format: int64
+#      deptName:
+#        description: 部门名称
+#        type: string
       remark:
         description: 备注
         type: string
@@ -1074,6 +1107,21 @@ definitions:
         description: 创建时间
         type: string
         format: date-time
+  SysRoleEntitySave:
+    type: object
+    properties:
+      roleName:
+        description: 角色名称
+        type: string
+      remark:
+        description: 备注
+        type: string
+      menuIdList:
+        description: 菜单ID列表
+        type: array
+        items:
+          type: integer
+          format: int64
   SysRoleEntityEdit:
     type: object
     properties:
@@ -1084,10 +1132,10 @@ definitions:
       roleName:
         description: 角色名称
         type: string
-      deptId:
-        description: 部门ID
-        type: integer
-        format: int64
+#      deptId:
+#        description: 部门ID
+#        type: integer
+#        format: int64
       remark:
         description: 备注
         type: string
@@ -1134,6 +1182,33 @@ definitions:
       open:
         description: 是否展开   true：展开   false：不展开
         type: boolean
+        format: int32
+  SysMenuEntitySave:
+    type: object
+    properties:
+      name:
+        description: 菜单名称
+        type: string
+      parentId:
+        description: 父菜单ID，一级菜单为0
+        type: integer
+        format: int64
+      url:
+        description: 菜单URL
+        type: string
+      perms:
+        description: 授权标识
+        type: string
+      type:
+        description: 类型     0：目录   1：菜单   2：按钮
+        type: integer
+        format: int32
+      icon:
+        description: 菜单图标
+        type: string
+      orderNum:
+        description: 排序
+        type: integer
         format: int32
   SysMenuEntityEdit:
     type: object
@@ -1317,4 +1392,16 @@ definitions:
         description: 创建时间
         type: string
         format: date-time
-
+  #登录请求对象封装
+  LoginEntity:
+    type: object
+    properties:
+      username:
+        description: 用户名
+        type: string
+      password:
+        description: 密码
+        type: string
+      captcha:
+        description: 验证码
+        type: string
