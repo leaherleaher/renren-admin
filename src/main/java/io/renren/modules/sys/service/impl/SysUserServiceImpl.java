@@ -60,7 +60,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUserEntity> i
 	}
 
 	@Override
-	@DataFilter(subDept = true, user = false)
+	@DataFilter(subDept = false, user = true)
 	public PageUtils queryPage(Map<String, Object> params) {
 		String username = (String)params.get("username");
 

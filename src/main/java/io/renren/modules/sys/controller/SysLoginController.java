@@ -19,17 +19,17 @@ package io.renren.modules.sys.controller;
 
 import com.google.code.kaptcha.Constants;
 import com.google.code.kaptcha.Producer;
+import io.netty.util.internal.StringUtil;
 import io.renren.common.annotation.SysLog;
 import io.renren.common.exception.RRException;
 import io.renren.common.utils.R;
 import io.renren.modules.sys.shiro.ShiroUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.imageio.ImageIO;
 import javax.servlet.ServletOutputStream;
@@ -76,7 +76,13 @@ public class SysLoginController {
 	@ResponseBody
 	@SysLog("用户登录")
 	@RequestMapping(value = "/sys/login", method = RequestMethod.POST)
-	public R login(String username, String password, String captcha) {
+	public R login(@RequestBody Map<String,Object> map) {
+		String username = (String)map.get("username");
+		String password = (String)map.get("password");
+		String captcha = (String)map.get("captcha");
+		if(StringUtils.isEmpty(username)||StringUtils.isEmpty(password)){
+			return R.error("用户名或密码不能为空！");
+		}
 		String kaptcha = ShiroUtils.getKaptcha(Constants.KAPTCHA_SESSION_KEY);
 		if(!captcha.equalsIgnoreCase(kaptcha)){
 			return R.error("验证码不正确");

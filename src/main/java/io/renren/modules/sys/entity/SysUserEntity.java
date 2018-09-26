@@ -105,8 +105,8 @@ public class SysUserEntity implements Serializable {
 	/**
 	 * 部门名称
 	 */
-	@TableField(exist=false)
-	private String deptName;
+	/*@TableField(exist=false)
+	private String deptName;*/
 
 	/**
 	 * 设置：
@@ -244,11 +244,11 @@ public class SysUserEntity implements Serializable {
 //		this.deptId = deptId;
 //	}
 
-	public String getDeptName() {
+	/*public String getDeptName() {
 		return deptName;
 	}
 
 	public void setDeptName(String deptName) {
 		this.deptName = deptName;
-	}
+	}*/
 }
