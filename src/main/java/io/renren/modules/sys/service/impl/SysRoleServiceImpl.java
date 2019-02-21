@@ -38,32 +38,32 @@ import java.util.Map;
 
 /**
  * 角色
- * 
+ *
  * @author chenshun
  * @email sunlightcs@gmail.com
  * @date 2016年9月18日 上午9:45:12
  */
 @Service("sysRoleService")
 public class SysRoleServiceImpl extends ServiceImpl<SysRoleDao, SysRoleEntity> implements SysRoleService {
-	@Autowired
-	private SysRoleMenuService sysRoleMenuService;
-//	@Autowired
+    @Autowired
+    private SysRoleMenuService sysRoleMenuService;
+    //	@Autowired
 //	private SysRoleDeptService sysRoleDeptService;
-	@Autowired
-	private SysUserRoleService sysUserRoleService;
+    @Autowired
+    private SysUserRoleService sysUserRoleService;
 
 
-	@Override
-	//@DataFilter(subDept = true, user = false)
-	public PageUtils queryPage(Map<String, Object> params) {
-		String roleName = (String)params.get("roleName");
+    @Override
+    //@DataFilter(subDept = true, user = false)
+    public PageUtils queryPage(Map<String, Object> params) {
+        String roleName = (String) params.get("roleName");
 
-		Page<SysRoleEntity> page = this.selectPage(
-			new Query<SysRoleEntity>(params).getPage(),
-			new EntityWrapper<SysRoleEntity>()
-				.like(StringUtils.isNotBlank(roleName),"role_name", roleName)
-				.addFilterIfNeed(params.get(Constant.SQL_FILTER) != null, (String)params.get(Constant.SQL_FILTER))
-		);
+        Page<SysRoleEntity> page = this.selectPage(
+                new Query<SysRoleEntity>(params).getPage(),
+                new EntityWrapper<SysRoleEntity>()
+                        .like(StringUtils.isNotBlank(roleName), "role_name", roleName)
+                        .addFilterIfNeed(params.get(Constant.SQL_FILTER) != null, (String) params.get(Constant.SQL_FILTER))
+        );
 
 
 //		for(SysRoleEntity sysRoleEntity : page.getRecords()){
@@ -73,49 +73,49 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleDao, SysRoleEntity> i
 //			}
 //		}
 
-		return new PageUtils(page);
-	}
+        return new PageUtils(page);
+    }
 
-	@Override
-	@Transactional(rollbackFor = Exception.class)
-	public void save(SysRoleEntity role) {
-		role.setCreateTime(new Date());
-		this.insert(role);
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void save(SysRoleEntity role) {
+        role.setCreateTime(new Date());
+        this.insert(role);
 
-		//保存角色与菜单关系
-		sysRoleMenuService.saveOrUpdate(role.getRoleId(), role.getMenuIdList());
-
-//		//保存角色与部门关系
-//		sysRoleDeptService.saveOrUpdate(role.getRoleId(), role.getDeptIdList());
-	}
-
-	@Override
-	@Transactional(rollbackFor = Exception.class)
-	public void update(SysRoleEntity role) {
-		this.updateAllColumnById(role);
-
-		//更新角色与菜单关系
-		sysRoleMenuService.saveOrUpdate(role.getRoleId(), role.getMenuIdList());
+        //保存角色与菜单关系
+        sysRoleMenuService.saveOrUpdate(role.getRoleId(), role.getMenuIdList());
 
 //		//保存角色与部门关系
 //		sysRoleDeptService.saveOrUpdate(role.getRoleId(), role.getDeptIdList());
-	}
+    }
 
-	@Override
-	@Transactional(rollbackFor = Exception.class)
-	public void deleteBatch(Long[] roleIds) {
-		//删除角色
-		this.deleteBatchIds(Arrays.asList(roleIds));
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void update(SysRoleEntity role) {
+        this.updateAllColumnById(role);
 
-		//删除角色与菜单关联
-		sysRoleMenuService.deleteBatch(roleIds);
+        //更新角色与菜单关系
+        sysRoleMenuService.saveOrUpdate(role.getRoleId(), role.getMenuIdList());
+
+//		//保存角色与部门关系
+//		sysRoleDeptService.saveOrUpdate(role.getRoleId(), role.getDeptIdList());
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void deleteBatch(Long[] roleIds) {
+        //删除角色
+        this.deleteBatchIds(Arrays.asList(roleIds));
+
+        //删除角色与菜单关联
+        sysRoleMenuService.deleteBatch(roleIds);
 
 //		//删除角色与部门关联
 //		sysRoleDeptService.deleteBatch(roleIds);
 
-		//删除角色与用户关联
-		sysUserRoleService.deleteBatch(roleIds);
-	}
+        //删除角色与用户关联
+        sysUserRoleService.deleteBatch(roleIds);
+    }
 
 
 }

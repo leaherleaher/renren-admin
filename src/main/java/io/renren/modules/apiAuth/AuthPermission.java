@@ -13,18 +13,17 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * <p>Title: AuthPermission</p>
  * <p>Description: </p>
- *  第三方服务请求后台管理系统
- *  1.判断是否存在session  不存在则登录
- *  2.存在则返回是否有访问对应url的权限
+ * 第三方服务请求后台管理系统
+ * 1.判断是否存在session  不存在则登录
+ * 2.存在则返回是否有访问对应url的权限
+ *
  * @Author yangtao
  * @Date 2018/9/4 16:33
  */
@@ -37,21 +36,24 @@ public class AuthPermission {
     @Autowired
     private SysUserDao sysUserDao;
 
-    @RequestMapping(value = "/auth", method = RequestMethod.POST)
-    public R getAuth(HttpServletRequest request, String requestUrl) {
+    @RequestMapping(value = "/auth", method = RequestMethod.GET)
+    public boolean getAuth(HttpServletRequest request, HttpServletResponse response) {
+        String requestUrl = request.getHeader("X-Original-URI");
+        System.out.println(request.getHeader("X-Original-URI"));
         //定义list集合存储url
-        List<String> urlList = null;
+        SysUserEntity sysUser = (SysUserEntity) SecurityUtils.getSubject().getPrincipal();
+        List<String> urlList = sysUserDao.queryAllUrl(sysUser.getUserId());
         //判断用户是否登录
-        HttpSession session = request.getSession();
+        /*HttpSession session = request.getSession();
         if (session != null) {
             //用户如果登录 获取用户通过shiro授权时候存储的用户对象
             SysUserEntity sysUser = (SysUserEntity) SecurityUtils.getSubject().getPrincipal();
             // 根据获取到的用户信息查询出用户配置的所有URL
             urlList = sysUserDao.queryAllUrl(sysUser.getUserId());
-        }else{
+        } else {
             logger.error("Login is invalid, please login again");
             return R.error("登录失效，请先登录！");
-        }
+        }*/
 
         //用户Url列表 将用户Url存储在set集合中（去掉重复，忽略空的Url）
         Set<String> permsSet = new HashSet<>();
@@ -64,11 +66,12 @@ public class AuthPermission {
         //遍历获取的url集合 返回对应的状态
         for (String url : permsSet) {
             if (url.contains(requestUrl)) {
-                return R.ok();
+                return true;
             }
         }
+
         logger.error("No access is allowed, please contact the system administrator.");
-        return R.error("没有权限访问，请联系系统管理员！");
+        return false;
     }
 }
 

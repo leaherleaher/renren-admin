@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: com.qiniu:qiniu-java-sdk:7.2.17">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/caches/modules-2/files-2.1/com.qiniu/qiniu-java-sdk/7.2.17/27c8dc38670fc60f36a07e922a16277830f30c31/qiniu-java-sdk-7.2.17.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/caches/modules-2/files-2.1/com.qiniu/qiniu-java-sdk/7.2.17/349fe78f1e341b54bd3b3b9a405c2d1e79a78410/qiniu-java-sdk-7.2.17-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

@@ -34,12 +34,12 @@ public class DataSourceTestService {
     @Autowired
     private SysUserService sysUserService;
 
-    public SysUserEntity queryUser(Long userId){
+    public SysUserEntity queryUser(Long userId) {
         return sysUserService.selectById(userId);
     }
 
     @DataSource(name = DataSourceNames.SECOND)
-    public SysUserEntity queryUser2(Long userId){
+    public SysUserEntity queryUser2(Long userId) {
         return sysUserService.selectById(userId);
     }
 }

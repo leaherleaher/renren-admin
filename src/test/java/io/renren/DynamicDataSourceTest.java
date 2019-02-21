@@ -18,7 +18,7 @@ public class DynamicDataSourceTest {
     private DataSourceTestService dataSourceTestService;
 
     @Test
-    public void test(){
+    public void test() {
         //数据源1
         SysUserEntity user1 = dataSourceTestService.queryUser(1L);
         System.out.println(ToStringBuilder.reflectionToString(user1));

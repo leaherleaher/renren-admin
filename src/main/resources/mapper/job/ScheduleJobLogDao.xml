@@ -3,5 +3,5 @@
 
 <mapper namespace="io.renren.modules.job.dao.ScheduleJobLogDao">
 
-	
+
 </mapper>

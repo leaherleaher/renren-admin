@@ -26,5 +26,5 @@ import io.renren.modules.job.entity.ScheduleJobLogEntity;
  * @since 1.2.0 2016-11-28
  */
 public interface ScheduleJobLogDao extends BaseMapper<ScheduleJobLogEntity> {
-	
+
 }

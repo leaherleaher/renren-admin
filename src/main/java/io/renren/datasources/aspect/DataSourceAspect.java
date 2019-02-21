@@ -17,6 +17,7 @@ import java.lang.reflect.Method;
 
 /**
  * 多数据源，切面处理类
+ *
  * @author chenshun
  * @email sunlightcs@gmail.com
  * @date 2017/9/16 22:20
@@ -37,10 +38,10 @@ public class DataSourceAspect implements Ordered {
         Method method = signature.getMethod();
 
         DataSource ds = method.getAnnotation(DataSource.class);
-        if(ds == null){
+        if (ds == null) {
             DynamicDataSource.setDataSource(DataSourceNames.FIRST);
             logger.debug("set datasource is " + DataSourceNames.FIRST);
-        }else {
+        } else {
             DynamicDataSource.setDataSource(ds.name());
             logger.debug("set datasource is " + ds.name());
         }

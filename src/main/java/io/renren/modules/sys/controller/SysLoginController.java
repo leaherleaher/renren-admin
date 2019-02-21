@@ -44,18 +44,18 @@ import java.util.Map;
 
 /**
  * 登录相关
- * 
+ *
  * @author chenshun
  * @email sunlightcs@gmail.com
  * @date 2016年11月10日 下午1:15:31
  */
 @Controller
 public class SysLoginController {
-	@Autowired
-	private Producer producer;
-	
-	@RequestMapping("captcha.jpg")
-	public void captcha(HttpServletResponse response)throws IOException {
+    @Autowired
+    private Producer producer;
+
+    @RequestMapping("/captcha.jpg")
+    public void captcha(HttpServletResponse response) throws IOException {
         response.setHeader("Cache-Control", "no-store, no-cache");
         response.setContentType("image/jpeg");
 
@@ -65,54 +65,54 @@ public class SysLoginController {
         BufferedImage image = producer.createImage(text);
         //保存到shiro session
         ShiroUtils.setSessionAttribute(Constants.KAPTCHA_SESSION_KEY, text);
-        
+
         ServletOutputStream out = response.getOutputStream();
         ImageIO.write(image, "jpg", out);
-	}
-	
-	/**
-	 * 登录
-	 */
-	@ResponseBody
-	@SysLog("用户登录")
-	@RequestMapping(value = "/sys/login", method = RequestMethod.POST)
-	public R login(@RequestBody Map<String,Object> map) {
-		String username = (String)map.get("username");
-		String password = (String)map.get("password");
-		String captcha = (String)map.get("captcha");
-		if(StringUtils.isEmpty(username)||StringUtils.isEmpty(password)){
-			return R.error("用户名或密码不能为空！");
-		}
-		String kaptcha = ShiroUtils.getKaptcha(Constants.KAPTCHA_SESSION_KEY);
-		if(!captcha.equalsIgnoreCase(kaptcha)){
+    }
+
+    /**
+     * 登录
+     */
+    @ResponseBody
+    @SysLog("用户登录")
+    @RequestMapping(value = "/sys/login", method = RequestMethod.POST)
+    public R login(@RequestBody Map<String, Object> map) {
+        String username = (String) map.get("username");
+        String password = (String) map.get("password");
+        String captcha = (String) map.get("captcha");
+        if (StringUtils.isEmpty(username) || StringUtils.isEmpty(password)) {
+            return R.error("用户名或密码不能为空！");
+        }
+        /*String kaptcha = ShiroUtils.getKaptcha(Constants.KAPTCHA_SESSION_KEY);*/
+		/*if(!captcha.equalsIgnoreCase(kaptcha)){
 			return R.error("验证码不正确");
-		}
+		}*/
 
-		try{
-			Subject subject = ShiroUtils.getSubject();
-			UsernamePasswordToken token = new UsernamePasswordToken(username, password);
-			subject.login(token);
-		}catch (UnknownAccountException e) {
-			return R.error(e.getMessage());
-		}catch (IncorrectCredentialsException e) {
-			throw new RRException("账号或密码不正确");
-			//return R.error("账号或密码不正确");
-		}catch (LockedAccountException e) {
-			return R.error("账号已被锁定,请联系管理员");
-		}catch (AuthenticationException e) {
-			return R.error("账户验证失败");
-		}
+        try {
+            Subject subject = ShiroUtils.getSubject();
+            UsernamePasswordToken token = new UsernamePasswordToken(username, password);
+            subject.login(token);
+        } catch (UnknownAccountException e) {
+            return R.error(e.getMessage());
+        } catch (IncorrectCredentialsException e) {
+            throw new RRException("账号或密码不正确");
+            //return R.error("账号或密码不正确");
+        } catch (LockedAccountException e) {
+            return R.error("账号已被锁定,请联系管理员");
+        } catch (AuthenticationException e) {
+            return R.error("账户验证失败");
+        }
 
-		return R.ok();
-	}
-	
-	/**
-	 * 退出
-	 */
-	@RequestMapping(value = "logout", method = RequestMethod.GET)
-	public String logout() {
-		ShiroUtils.logout();
-		return "redirect:login.html";
-	}
-	
+        return R.ok();
+    }
+
+    /**
+     * 退出
+     */
+    @RequestMapping(value = "/logout", method = RequestMethod.GET)
+    public String logout() {
+        ShiroUtils.logout();
+        return "redirect:login.html";
+    }
+
 }
